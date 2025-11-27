@@ -1,9 +1,10 @@
 {
     'name': 'Kardex Costeado Report',
-    'version': '1.0',
+    'version': '17.0.1.0.0',
     'summary': 'Custom Kardex report with cost details for Odoo 17',
     'author': 'Wens',
     'category': 'Inventory',
+    'license': 'OPL-1',
     'depends': ['stock', 'stock_account'],
     'data': [
         'security/ir.model.access.csv',
