@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="kardex_costeado_report_template">
+    <t t-call="web.html_container">
+      <t t-set="kardex_data" t-value="data.get('kardex_data') or {}"/>
+      <t t-set="date_from" t-value="data.get('date_from')"/>
+      <t t-set="date_to" t-value="data.get('date_to')"/>
+
+      <t t-call="web.external_layout">
+        <div class="page">
+          <h2>Kardex Costeado Report</h2>
+          <p>Período: <t t-esc="date_from"/> - <t t-esc="date_to"/></p>
+
+          <t t-foreach="kardex_data.values()" t-as="product_data">
+            <h3>Producto: <t t-esc="product_data.get('product') or ''"/></h3>
+
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Documento</th>
+                  <th>Bodega</th>
+                  <th colspan="2" class="text-center">Existencia Anterior</th>
+                  <th colspan="2" class="text-center">Entradas</th>
+                  <th colspan="2" class="text-center">Salidas</th>
+                  <th>Traslado</th>
+                  <th colspan="2" class="text-center">Existencia Actual</th>
+                  <!-- NUEVA COLUMNA -->
+                  <th class="text-right">Ajuste (Q)</th>
+                  <th class="text-right">Costo Actual (Unit)</th>
+                </tr>
+                <tr>
+                  <th/><th/><th/><th/>
+                  <th class="text-right">Unidades</th>
+                  <th class="text-right">Valor</th>
+                  <th class="text-right">Unidades</th>
+                  <th class="text-right">Valor</th>
+                  <th class="text-right">Unidades</th>
+                  <th class="text-right">Valor</th>
+                  <th class="text-right">Unidades</th>
+                  <th class="text-right">Unidades</th>
+                  <th class="text-right">Valor</th>
+                  <!-- SUBHEADER NUEVA COLUMNA -->
+                  <th class="text-right">(Q)</th>
+                  <th class="text-right">(Unit)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <t t-foreach="product_data.get('moves') or []" t-as="mv">
+                  <tr>
+                    <td><t t-esc="mv.get('date')"/></td>
+                    <td><t t-esc="mv.get('type')"/></td>
+                    <td><t t-esc="mv.get('ref')"/></td>
+                    <td><t t-esc="mv.get('warehouse')"/></td>
+
+                    <td class="text-right"><t t-esc="('%.4f' % (mv.get('previous_qty') or 0.0))"/></td>
+                    <td class="text-right"><t t-esc="('%.2f' % (mv.get('previous_value') or 0.0))"/></td>
+
+                    <td class="text-right"><t t-if="mv.get('type') == 'Entrada'"><t t-esc="('%.4f' % (mv.get('qty') or 0.0))"/></t></td>
+                    <td class="text-right"><t t-if="mv.get('type') == 'Entrada'"><t t-esc="('%.2f' % (mv.get('total_move') or 0.0))"/></t></td>
+
+                    <td class="text-right"><t t-if="mv.get('type') == 'Salida'"><t t-esc="('%.4f' % (mv.get('qty') or 0.0))"/></t></td>
+                    <td class="text-right"><t t-if="mv.get('type') == 'Salida'"><t t-esc="('%.2f' % (mv.get('total_move') or 0.0))"/></t></td>
+
+                    <td class="text-right"><t t-if="mv.get('type') == 'Traslado'"><t t-esc="('%.4f' % (mv.get('qty') or 0.0))"/></t></td>
+
+                    <td class="text-right"><t t-esc="('%.4f' % (mv.get('balance_qty') or 0.0))"/></td>
+                    <td class="text-right"><t t-esc="('%.2f' % (mv.get('balance_value') or 0.0))"/></td>
+
+                    <!-- NUEVA CELDA Ajuste (Q) -->
+                    <td class="text-right">
+                      <t t-if="mv.get('type') == 'Ajuste de costo'">
+                        <t t-esc="('%.2f' % (mv.get('adjust_value') or 0.0))"/>
+                      </t>
+                    </td>
+
+                    <!-- Costo actual unitario -->
+                    <td class="text-right">
+                      <t t-set="bq" t-value="mv.get('balance_qty') or 0.0"/>
+                      <t t-set="bv" t-value="mv.get('balance_value') or 0.0"/>
+                      <t t-esc="('%.4f' % ((bv / bq) if bq else 0.0))"/>
+                    </td>
+                  </tr>
+                </t>
+              </tbody>
+            </table>
+          </t>
+        </div>
+      </t>
+    </t>
+  </template>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <!-- Inherit Kardex Costeado PDF to display dynamic opening balances -->
+  <template id="kardex_costeado_report_template_inherit" inherit_id="kardex_costeado_report.kardex_costeado_report_template">
+    <!-- Reemplazar mostrar de Existencia Anterior cantidad -->
+    <xpath expr="//span[@t-esc=&quot;product_data.get('exist_prev_qty') or product_data.get('existencia_anterior_qty') or 0.0&quot;]" position="replace">
+      <span t-esc="product_data.get('opening_qty') or 0.0"/>
+    </xpath>
+    <!-- Reemplazar mostrar de Existencia Anterior valor -->
+    <xpath expr="//span[@t-esc=&quot;product_data.get('exist_prev_val') or product_data.get('existencia_anterior_val') or 0.0&quot;]" position="replace">
+      <span t-esc="product_data.get('opening_val') or 0.0"/>
+    </xpath>
+  </template>
+</odoo>

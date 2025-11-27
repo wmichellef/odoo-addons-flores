@@ -1,0 +1,32 @@
+
+<odoo>
+  <record id="view_kardex_costeado_wizard_form" model="ir.ui.view">
+    <field name="name">kardex.costeado.wizard.form</field>
+    <field name="model">kardex.costeado.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Kardex Costeado">
+        <group>
+          <field name="company_id"/>
+          <field name="date_from"/>
+          <field name="date_to"/>
+          <field name="product_ids" widget="many2many_tags" options="{'no_create': True}"/>
+          <field name="location_ids" widget="many2many_tags"/>
+        </group>
+        <footer>
+          <button string="Imprimir PDF" name="action_print_pdf" type="object" class="btn-primary"/>
+          <button string="Cerrar" class="btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_kardex_costeado_wizard" model="ir.actions.act_window">
+    <field name="name">Kardex Costeado</field>
+    <field name="res_model">kardex.costeado.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+  <menuitem id="menu_kardex_root" name="Kardex Reports" parent="stock.menu_stock_warehouse_mgmt"/>
+  <menuitem id="menu_kardex_costeado" name="Kardex Costeado" parent="menu_kardex_root" action="action_kardex_costeado_wizard"/>
+</odoo>
